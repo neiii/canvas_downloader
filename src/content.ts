@@ -23,7 +23,6 @@ function findLectureSlides(): LectureSlide[] {
     const attachmentId = element.className.match(/Attachment_(\d+)/)?.[1];
     if (!attachmentId) return;
 
-    // Only store the first occurrence of a file name
     if (!seenNames.has(name)) {
       const slide = {
         id: attachmentId,
@@ -39,7 +38,6 @@ function findLectureSlides(): LectureSlide[] {
 }
 
 function createDownloadUI(slides: LectureSlide[]) {
-  // Remove existing UI if present
   const existingUI = document.getElementById('lecture-downloader');
   if (existingUI) {
     existingUI.remove();
@@ -117,7 +115,6 @@ function createDownloadUI(slides: LectureSlide[]) {
   header.appendChild(closeButton);
   container.appendChild(header);
 
-  // Add search bar
   const searchContainer = document.createElement('div');
   searchContainer.style.cssText = `
     margin-bottom: 16px;
@@ -168,7 +165,6 @@ function createDownloadUI(slides: LectureSlide[]) {
     gap: 4px;
   `;
 
-  // Add info icon
   const infoIcon = document.createElement('span');
   infoIcon.innerHTML = '&#9432;'; // Info symbol
   infoIcon.style.cssText = `
@@ -183,7 +179,6 @@ function createDownloadUI(slides: LectureSlide[]) {
   searchContainer.appendChild(searchHelp);
   container.appendChild(searchContainer);
 
-  // Add select all button
   const selectAllContainer = document.createElement('div');
   selectAllContainer.style.cssText = `
     margin-bottom: 16px;
@@ -220,7 +215,6 @@ function createDownloadUI(slides: LectureSlide[]) {
     }
   `;
 
-  // Add icon to button
   const selectIcon = document.createElement('span');
   selectIcon.innerHTML = '✓';
   selectIcon.style.cssText = `
@@ -231,7 +225,6 @@ function createDownloadUI(slides: LectureSlide[]) {
 
   let isAllSelected = false;
   
-  // Add button hover and active states
   selectAllButton.addEventListener('mouseover', () => {
     selectAllButton.style.backgroundColor = '#f0f7ff';
   });
@@ -245,7 +238,6 @@ function createDownloadUI(slides: LectureSlide[]) {
     selectAllButton.style.backgroundColor = '#f0f7ff';
   });
 
-  // Toggle functionality
   selectAllButton.addEventListener('click', () => {
     isAllSelected = !isAllSelected;
     
@@ -301,7 +293,6 @@ function createDownloadUI(slides: LectureSlide[]) {
       selectAllButton.prepend(selectIcon);
     }
 
-    // Update all visible checkboxes
     Array.from(list.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')).forEach(checkbox => {
       checkbox.checked = isAllSelected;
       if (isAllSelected) {
@@ -328,7 +319,6 @@ function createDownloadUI(slides: LectureSlide[]) {
     background: white;
   `;
 
-  // Custom scrollbar
   list.style.cssText += `
     scrollbar-width: thin;
     scrollbar-color: #ccc transparent;
@@ -360,7 +350,6 @@ function createDownloadUI(slides: LectureSlide[]) {
     checkbox.value = slide.id;
     checkbox.id = `slide-${slide.id}`;
     
-    // Custom checkbox styling
     checkbox.style.cssText = `
       appearance: none;
       -webkit-appearance: none;
@@ -374,7 +363,6 @@ function createDownloadUI(slides: LectureSlide[]) {
       transition: all 0.2s ease;
     `;
 
-    // Add custom checkbox check mark
     checkbox.addEventListener('change', function() {
       if (this.checked) {
         this.style.backgroundColor = '#0066cc';
@@ -398,7 +386,6 @@ function createDownloadUI(slides: LectureSlide[]) {
     item.appendChild(checkbox);
     item.appendChild(label);
 
-    // Hover effect for the entire row
     item.addEventListener('mouseover', () => {
       item.style.backgroundColor = '#f5f5f5';
     });
@@ -409,10 +396,8 @@ function createDownloadUI(slides: LectureSlide[]) {
     return { item, slide };
   });
 
-  // Add all items to the list initially
   items.forEach(({ item }) => list.appendChild(item));
 
-  // Update search functionality to maintain list size
   let searchTimeout: number | null = null;
   searchInput.addEventListener('input', () => {
     if (searchTimeout) {
@@ -434,12 +419,10 @@ function createDownloadUI(slides: LectureSlide[]) {
         matcher = (text: string) => text.toLowerCase().includes(query.toLowerCase());
       }
 
-      // Clear the list but maintain size
       while (list.firstChild) {
         list.removeChild(list.firstChild);
       }
 
-      // Reset select all button state
       isAllSelected = false;
       selectAllButton.style.cssText = `
         background: #f8f9fa;
@@ -466,7 +449,6 @@ function createDownloadUI(slides: LectureSlide[]) {
       selectAllButton.textContent = 'Select All Lectures';
       selectAllButton.prepend(selectIcon);
 
-      // Filter and add matching items
       const matchingItems = items.filter(({ slide }) => !query || matcher(slide.name));
       
       if (matchingItems.length === 0 && query) {
@@ -495,7 +477,6 @@ function createDownloadUI(slides: LectureSlide[]) {
 
   container.appendChild(list);
 
-  // Add folder option
   const folderOption = document.createElement('div');
   folderOption.style.cssText = `
     margin-bottom: 16px;
@@ -630,10 +611,8 @@ function createDownloadUI(slides: LectureSlide[]) {
 
   container.appendChild(downloadButton);
   
-  // Update appear animation
   document.body.appendChild(container);
   requestAnimationFrame(() => {
-    // Force a reflow to ensure the initial state is rendered
     container.getBoundingClientRect();
     container.style.opacity = '1';
     container.style.transform = 'translateY(0)';
