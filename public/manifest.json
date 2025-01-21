@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Swansea Lecture Downloader",
+  "version": "1.0.1",
+  "description": "I'm sure you can infer what it does",
+  "permissions": [
+    "downloads",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://canvas.swansea.ac.uk/*"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://canvas.swansea.ac.uk/courses/*/modules"],
+      "js": ["content.js"]
+    }
+  ]
+} 
